@@ -100,3 +100,8 @@ export async function sumByCategory() {
   );
   return result.rows;
 }
+/** Удаляет чек. Позиции удалятся каскадом (ON DELETE CASCADE). */
+export async function deleteReceiptById(id) {
+  const result = await pool.query('DELETE FROM receipts WHERE id = $1', [id]);
+  return result.rowCount > 0; // true = что-то реально удалили
+}

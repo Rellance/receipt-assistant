@@ -35,3 +35,11 @@ export async function uploadReceipt(file) {
   });
   return handleResponse(response);
 }
+export async function deleteReceipt(id) {
+    const response = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      throw new Error(data?.error || `Palvelinvirhe (${response.status})`);
+    }
+    // 204 — тела нет, парсить нечего
+  }

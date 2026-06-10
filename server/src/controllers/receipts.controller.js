@@ -50,3 +50,20 @@ export async function categoryStats(req, res, next) {
     next(err);
   }
 }
+export async function deleteReceipt(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: 'Virheellinen id' });
+    }
+
+    const deleted = await receiptsService.deleteReceipt(id);
+    if (!deleted) {
+      return res.status(404).json({ error: 'Kuittia ei löytynyt' });
+    }
+
+    res.status(204).end(); // 204 No Content: успех, тела нет
+  } catch (err) {
+    next(err);
+  }
+}

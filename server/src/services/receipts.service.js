@@ -31,3 +31,6 @@ export async function getReceiptById(id) {
 export async function getCategoryStats() {
   return receiptsRepo.sumByCategory();
 }
+export async function deleteReceipt(id) {
+  return receiptsRepo.deleteReceiptById(id);
+}

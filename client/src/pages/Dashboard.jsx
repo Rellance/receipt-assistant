@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { fetchReceipts, fetchCategoryStats } from '../api/receipts';
+import { fetchReceipts, fetchCategoryStats, deleteReceipt } from '../api/receipts';
 import FileUploader from '../components/FileUploader';
 
 const CATEGORY_COLORS = {
@@ -43,6 +43,17 @@ export default function Dashboard() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  async function handleDelete(id, storeName) {
+    // Подтверждение обязательно: удаление необратимо
+    if (!window.confirm(`Poistetaanko kuitti: ${storeName}?`)) return;
+    try {
+      await deleteReceipt(id);
+      await loadData(); // Перезагружаем всё: суммы и график тоже изменились
+    } catch (err) {
+      setError(err.message);
+    }
+  }
 
   // Summat lasketaan valuutoittain — eri valuuttoja ei voi laskea yhteen
   const totalsByCurrency = receipts.reduce((acc, r) => {
@@ -147,6 +158,7 @@ export default function Dashboard() {
                 <th>Luokka</th>
                 <th>Rivejä</th>
                 <th>Summa</th>
+                <th aria-label="Toiminnot" />
               </tr>
             </thead>
             <tbody>
@@ -167,6 +179,24 @@ export default function Dashboard() {
                     <td className="cell-muted">{r.items_count}</td>
                     <td className="amount">
                       {formatMoney(Number(r.total_amount), r.currency)}
+                    </td>
+                    <td className="cell-actions">
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(r.id, r.store_name)}
+                        aria-label={`Poista kuitti ${r.store_name}`}
+                        title="Poista"
+                      >
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
+                          <path
+                            d="M4 7h16M10 11v6m4-6v6M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
                     </td>
                   </tr>
                 );

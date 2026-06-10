@@ -9,12 +9,12 @@ export async function uploadReceipt(req, res, next) {
     const result = await receiptsService.processReceiptUpload(
       req.file.buffer,
       req.file.mimetype,
-      null // imagePath: фото пока не сохраняем на диск, см. пояснение ниже
+      null // imagePath: photo not saved to disk yet
     );
 
     res.status(201).json(result);
   } catch (err) {
-    next(err); // Передаём в errorHandler, НЕ обрабатываем тут
+    next(err); // Pass to errorHandler — do not handle here
   }
 }
 
@@ -50,6 +50,7 @@ export async function categoryStats(req, res, next) {
     next(err);
   }
 }
+
 export async function deleteReceipt(req, res, next) {
   try {
     const id = Number(req.params.id);
@@ -62,7 +63,7 @@ export async function deleteReceipt(req, res, next) {
       return res.status(404).json({ error: 'Kuittia ei löytynyt' });
     }
 
-    res.status(204).end(); // 204 No Content: успех, тела нет
+    res.status(204).end(); // 204 No Content: success, no body
   } catch (err) {
     next(err);
   }

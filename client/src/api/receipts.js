@@ -1,10 +1,10 @@
-// Единственное место во фронтенде, где живут HTTP-запросы.
-// Компоненты не знают про fetch, URL'ы и заголовки.
+// Single place on the frontend for HTTP requests.
+// Components do not know about fetch, URLs, or headers.
 
 const BASE_URL = '/api/receipts';
 
 async function handleResponse(response) {
-  // Пытаемся прочитать JSON даже при ошибке — бэкенд шлёт { error: "..." }
+  // Try to parse JSON even on error — backend sends { error: "..." }
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
@@ -25,21 +25,22 @@ export async function fetchCategoryStats() {
 
 export async function uploadReceipt(file) {
   const formData = new FormData();
-  formData.append('receipt', file); // Имя поля = имя в multer .single('receipt')
+  formData.append('receipt', file); // Field name must match multer .single('receipt')
 
   const response = await fetch(BASE_URL, {
     method: 'POST',
     body: formData,
-    // ВАЖНО: НЕ ставим Content-Type вручную!
-    // Браузер сам поставит multipart/form-data с правильным boundary.
+    // IMPORTANT: do NOT set Content-Type manually!
+    // The browser sets multipart/form-data with the correct boundary.
   });
   return handleResponse(response);
 }
+
 export async function deleteReceipt(id) {
-    const response = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
-    if (!response.ok) {
-      const data = await response.json().catch(() => null);
-      throw new Error(data?.error || `Palvelinvirhe (${response.status})`);
-    }
-    // 204 — тела нет, парсить нечего
+  const response = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error || `Palvelinvirhe (${response.status})`);
   }
+  // 204 — no body to parse
+}

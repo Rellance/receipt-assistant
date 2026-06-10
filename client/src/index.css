@@ -1,10 +1,10 @@
 /* ============================================================
    Receipt Assistant — Dark Fintech UI
-   Тёмная тема, плотная типографика, цветовое кодирование данных
+   Dark theme, dense typography, data color coding
    ============================================================ */
 
 :root {
-  /* Поверхности: три уровня глубины */
+  /* Surfaces: three depth levels */
   --bg: #0e1015;
   --surface: #161920;
   --surface-raised: #1c2029;
@@ -43,7 +43,7 @@ body {
   font-feature-settings: 'ss01' on, 'cv11' on;
   font-size: 14px;
   background: var(--bg);
-  /* Глубина вместо плоской заливки: холодное свечение из верхнего угла */
+  /* Depth instead of flat fill: cool glow from top corner */
   background-image:
     radial-gradient(ellipse 70% 45% at 75% -5%, rgba(110, 133, 247, 0.08), transparent),
     radial-gradient(ellipse 50% 40% at 10% 0%, rgba(110, 133, 247, 0.04), transparent);
@@ -53,7 +53,7 @@ body {
   min-height: 100vh;
 }
 
-/* ---------- Каркас ---------- */
+/* ---------- Layout ---------- */
 .dashboard {
   max-width: 880px;
   margin: 0 auto;
@@ -83,11 +83,11 @@ body {
   margin: 0;
 }
 
-/* ---------- Сетка стат-карточек ---------- */
+/* ---------- Stats grid ---------- */
 .stats-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
-  /* Главная метрика — шире */
+  /* Primary metric — wider column */
   gap: 14px;
   margin-top: 20px;
 }
@@ -105,7 +105,7 @@ body {
   background: var(--surface-raised);
 }
 
-/* Главная карточка выделена подсветкой границы */
+/* Primary card highlighted with accent border */
 .stat-card--primary {
   border-color: rgba(110, 133, 247, 0.3);
   background: linear-gradient(180deg, var(--accent-soft) 0%, var(--surface) 70%);
@@ -130,7 +130,7 @@ body {
   font-size: 28px;
 }
 
-/* ---------- Карточки секций ---------- */
+/* ---------- Section cards ---------- */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -148,7 +148,7 @@ body {
   margin: 0 0 14px;
 }
 
-/* ---------- Дропзона ---------- */
+/* ---------- Dropzone ---------- */
 .dropzone {
   margin-top: 14px;
   padding: 28px 24px;
@@ -230,7 +230,7 @@ body {
   }
 }
 
-/* ---------- Категории ---------- */
+/* ---------- Categories ---------- */
 .category-list {
   list-style: none;
   padding: 0;
@@ -281,7 +281,7 @@ body {
   border-radius: 99px;
   transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   min-width: 7px;
-  /* Цвет приходит из inline-style по категории */
+  /* Color comes from inline style per category */
 }
 
 .category-total {
@@ -290,7 +290,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Таблица ---------- */
+/* ---------- Table ---------- */
 .receipts-table {
   width: 100%;
   border-collapse: collapse;
@@ -352,7 +352,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Состояния ---------- */
+/* ---------- States ---------- */
 .error-message {
   margin-top: 12px;
   padding: 11px 15px;
@@ -376,7 +376,7 @@ body {
   color: var(--text-muted);
 }
 
-/* ============ Мобильная версия ============ */
+/* ============ Mobile ============ */
 @media (max-width: 640px) {
   .dashboard {
     padding: 24px 14px 56px;
@@ -386,7 +386,7 @@ body {
     font-size: 22px;
   }
 
-  /* Стат-карточки: в столбик, компактнее */
+  /* Stats cards: single column, more compact */
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -412,7 +412,7 @@ body {
     padding: 22px 16px;
   }
 
-  /* Категории: компактная сетка */
+  /* Categories: compact grid */
   .category-row {
     grid-template-columns: 96px 1fr 78px;
     gap: 8px;
@@ -428,7 +428,7 @@ body {
     font-size: 13px;
   }
 
-  /* ===== Таблица превращается в карточки ===== */
+  /* ===== Table becomes cards ===== */
   .receipts-table {
     font-size: 13px;
   }
@@ -437,7 +437,7 @@ body {
     display: none;
   }
 
-  /* Заголовки не нужны: карточка самоописательна */
+  /* Headers hidden: card layout is self-explanatory */
   .receipts-table tbody {
     display: block;
   }
@@ -463,10 +463,10 @@ body {
     display: block;
     padding: 0;
     border-bottom: none;
-    /* Граница теперь у строки-карточки, не у ячеек */
+    /* Border on row card, not individual cells */
   }
 
-  /* Раскладываем ячейки по областям сетки */
+  /* Map cells to grid areas */
   .receipts-table td:nth-child(1) {
     grid-area: date;
   }
@@ -486,7 +486,7 @@ body {
     display: none;
   }
 
-  /* Rivejä — лишнее на мобиле */
+  /* Rivejä — hidden on mobile */
   .receipts-table td:nth-child(5) {
     grid-area: amount;
   }
@@ -496,7 +496,7 @@ body {
     grid-area: actions;
   }
 
-  /* Удаление */
+  /* Delete action */
 
   .cell-store {
     font-size: 14px;
@@ -521,7 +521,7 @@ body {
   }
 }
 
-/* ---------- Доступность ---------- */
+/* ---------- Accessibility ---------- */
 @media (prefers-reduced-motion: reduce) {
 
   *,
@@ -549,7 +549,7 @@ body {
   color: var(--text-muted);
   cursor: pointer;
   opacity: 0;
-  /* Кнопка появляется только при наведении на строку */
+  /* Button visible only on row hover */
   transition: opacity 0.15s var(--ease), background 0.15s var(--ease),
     color 0.15s var(--ease);
 }
@@ -569,7 +569,7 @@ body {
   outline-offset: 1px;
 }
 
-/* На устройствах без hover (телефоны, планшеты) кнопка видна всегда */
+/* On hover-less devices (phones, tablets) button is always visible */
 @media (hover: none) {
   .btn-delete {
     opacity: 1;

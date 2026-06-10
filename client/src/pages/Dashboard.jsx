@@ -45,11 +45,11 @@ export default function Dashboard() {
   }, [loadData]);
 
   async function handleDelete(id, storeName) {
-    // Подтверждение обязательно: удаление необратимо
+    // Confirmation required: deletion is irreversible
     if (!window.confirm(`Poistetaanko kuitti: ${storeName}?`)) return;
     try {
       await deleteReceipt(id);
-      await loadData(); // Перезагружаем всё: суммы и график тоже изменились
+      await loadData(); // Reload everything: totals and chart changed too
     } catch (err) {
       setError(err.message);
     }

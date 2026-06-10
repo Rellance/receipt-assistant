@@ -1,9 +1,8 @@
 import multer from 'multer';
 
-// Центральный обработчик ошибок. Express вызывает его, когда
-// любой роут/middleware передал ошибку в next(err).
+// Central error handler. Express calls this when any route/middleware passes next(err).
 export function errorHandler(err, req, res, next) {
-  // Ошибки multer (например, файл больше лимита)
+  // Multer errors (e.g. file exceeds size limit)
   if (err instanceof multer.MulterError) {
     const message =
       err.code === 'LIMIT_FILE_SIZE'
@@ -14,8 +13,8 @@ export function errorHandler(err, req, res, next) {
 
   const status = err.statusCode || 500;
 
-  // 5xx логируем полностью (это наши баги или сбои внешних сервисов),
-  // 4xx — это ошибки клиента, стектрейс не нужен.
+  // Log 5xx fully (our bugs or upstream failures);
+  // 4xx are client errors — stack trace not needed.
   if (status >= 500) {
     console.error('[ERROR]', err);
   }
@@ -23,7 +22,7 @@ export function errorHandler(err, req, res, next) {
   res.status(status).json({
     error:
       status >= 500 && !err.statusCode
-        ? 'Sisäinen palvelinvirhe' // Не светим детали наружу
+        ? 'Sisäinen palvelinvirhe' // Do not expose internal details
         : err.message,
   });
 }

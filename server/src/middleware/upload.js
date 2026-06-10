@@ -3,8 +3,8 @@ import multer from 'multer';
 const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_SIZE_MB = 10;
 
-// memoryStorage: файл живёт в req.file.buffer и не пишется на диск.
-// Для нашего сценария идеально — буфер сразу уходит в Gemini.
+// memoryStorage: file lives in req.file.buffer, not written to disk.
+// Ideal for our flow — buffer goes straight to Gemini.
 export const uploadReceiptImage = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_SIZE_MB * 1024 * 1024 },
@@ -16,4 +16,4 @@ export const uploadReceiptImage = multer({
     }
     cb(null, true);
   },
-}).single('receipt'); // Имя поля в form-data
+}).single('receipt'); // form-data field name

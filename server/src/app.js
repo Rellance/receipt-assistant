@@ -9,7 +9,7 @@ export function createApp() {
   app.use('/api/receipts', receiptsRouter);
 
   app.use((req, res) => res.status(404).json({ error: 'Reittiä ei löytynyt' }));
-  app.use(errorHandler); // Всегда ПОСЛЕДНИМ
+  app.use(errorHandler); // Must be last
 
   return app;
 }

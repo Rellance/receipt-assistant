@@ -1,17 +1,17 @@
 import pg from 'pg';
 import { env } from '../config/env.js';
 
-// Пул соединений: вместо открытия нового соединения на каждый запрос
-// (дорого, ~50-100мс) переиспользуем готовые из пула.
+// Connection pool: reuse connections instead of opening a new one per request
+// (~50–100 ms overhead per new connection).
 export const pool = new pg.Pool({
   connectionString: env.DATABASE_URL,
-  max: 10,                      // Максимум соединений (для пет-проекта хватит)
-  idleTimeoutMillis: 30_000,    // Закрывать простаивающие через 30 сек
+  max: 10,                      // Max connections (enough for a pet project)
+  idleTimeoutMillis: 30_000,    // Close idle connections after 30 s
   connectionTimeoutMillis: 5_000,
 });
 
-// Если соединение в пуле умерло (БД перезапустилась) — логируем,
-// но не роняем процесс. Пул сам создаст новое соединение.
+// If a pooled connection dies (e.g. DB restarted), log it but do not crash —
+// the pool will create a new connection.
 pool.on('error', (err) => {
-  console.error('[DB] Ошибка простаивающего соединения:', err.message);
+  console.error('[DB] Idle connection error:', err.message);
 });

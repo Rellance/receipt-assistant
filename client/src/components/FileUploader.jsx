@@ -45,7 +45,7 @@ export default function FileUploader({ onUploadSuccess }) {
         role="button"
         tabIndex={0}
       >
-        {/* Иконка — чистый SVG, рендерится одинаково везде, в отличие от эмодзи */}
+        {/* Pure SVG icon — renders consistently everywhere, unlike emoji */}
         <svg className="dropzone__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M12 16V4m0 0L7 9m5-5l5 5M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"

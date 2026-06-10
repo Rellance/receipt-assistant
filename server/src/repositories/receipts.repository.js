@@ -1,11 +1,11 @@
 import { pool } from '../db/pool.js';
 
 /**
- * Сохраняет чек и его позиции АТОМАРНО (в одной транзакции).
- * Либо сохранится всё, либо ничего.
+ * Saves a receipt and its line items ATOMICALLY (single transaction).
+ * Either everything is saved or nothing is.
  */
 export async function insertReceiptWithItems(receipt, rawAiJson, imagePath) {
-  const client = await pool.connect(); // Берём одно соединение из пула
+  const client = await pool.connect(); // Take one connection from the pool
 
   try {
     await client.query('BEGIN');
@@ -28,8 +28,8 @@ export async function insertReceiptWithItems(receipt, rawAiJson, imagePath) {
 
     const receiptId = receiptResult.rows[0].id;
 
-    // Вставляем все позиции одним запросом (bulk insert),
-    // а не циклом по одной — меньше round-trip'ов к БД.
+    // Insert all line items in one query (bulk insert),
+    // not one-by-one in a loop — fewer round-trips to the DB.
     const values = [];
     const placeholders = receipt.items
       .map((item, i) => {
@@ -52,11 +52,11 @@ export async function insertReceiptWithItems(receipt, rawAiJson, imagePath) {
     await client.query('ROLLBACK');
     throw err;
   } finally {
-    client.release(); // КРИТИЧНО: вернуть соединение в пул в любом случае
+    client.release(); // CRITICAL: always return connection to the pool
   }
 }
 
-/** Список чеков с агрегированным числом позиций (для дашборда). */
+/** Receipt list with aggregated line-item count (for dashboard). */
 export async function findAllReceipts() {
   const result = await pool.query(
     `SELECT r.id, r.store_name, r.purchase_date, r.total_amount,
@@ -70,7 +70,7 @@ export async function findAllReceipts() {
   return result.rows;
 }
 
-/** Один чек со всеми позициями. */
+/** Single receipt with all line items. */
 export async function findReceiptById(id) {
   const receiptResult = await pool.query(
     `SELECT id, store_name, purchase_date, total_amount, currency,
@@ -90,7 +90,7 @@ export async function findReceiptById(id) {
   return { ...receiptResult.rows[0], items: itemsResult.rows };
 }
 
-/** Агрегация по категориям (для графика на дашборде). */
+/** Aggregation by category (for dashboard chart). */
 export async function sumByCategory() {
   const result = await pool.query(
     `SELECT category, SUM(total_amount)::numeric(12,2) AS total, COUNT(*)::int AS receipts
@@ -100,8 +100,9 @@ export async function sumByCategory() {
   );
   return result.rows;
 }
-/** Удаляет чек. Позиции удалятся каскадом (ON DELETE CASCADE). */
+
+/** Deletes a receipt. Line items are removed via ON DELETE CASCADE. */
 export async function deleteReceiptById(id) {
   const result = await pool.query('DELETE FROM receipts WHERE id = $1', [id]);
-  return result.rowCount > 0; // true = что-то реально удалили
+  return result.rowCount > 0; // true = a row was actually deleted
 }

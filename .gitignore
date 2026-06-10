@@ -1,19 +1,19 @@
-# Секреты — САМОЕ ВАЖНОЕ
+# Secrets — most important
 .env
 *.env
 !.env.example
 
-# Зависимости
+# Dependencies
 node_modules/
 
-# Сборка
+# Build output
 client/dist/
 
-# Загруженные файлы и логи
+# Uploads and logs
 uploads/
 *.log
 
-# Мусор ОС и редакторов
+# OS and editor junk
 .DS_Store
 Thumbs.db
 .vscode/

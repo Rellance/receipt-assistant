@@ -1,3 +1,6 @@
+-- One-time migration: maps legacy v1 category labels (pre-Finnish schema) to Finnish.
+-- WHEN literals below must match category values stored before this migration ran.
+
 BEGIN;
 
 ALTER TABLE receipts DROP CONSTRAINT receipts_category_check;

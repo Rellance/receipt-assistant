@@ -1,0 +1,20 @@
+# Секреты — САМОЕ ВАЖНОЕ
+.env
+*.env
+!.env.example
+
+# Зависимости
+node_modules/
+
+# Сборка
+client/dist/
+
+# Загруженные файлы и логи
+uploads/
+*.log
+
+# Мусор ОС и редакторов
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
